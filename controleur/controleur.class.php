@@ -9,7 +9,8 @@ class Controleur {
     public function __construct() {
         $this->services = [
             'user' => user::class,
-            'commerce' => commerce::class
+            'commerce' => commerce::class,
+            'produit' => produit::class
         ];
     }
 

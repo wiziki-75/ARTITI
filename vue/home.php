@@ -22,6 +22,7 @@ $role = $_SESSION['role'] ?? 'Utilisateur';
     </div>
 
     <!-- Bouton de déconnexion -->
-    <a href="index.php?page=passer_vendeur" class="btn mt-4">Passer vendeur</a>
+    <a href="index.php?page=passer_vendeur" class="btn btn-primary mt-4">Passer vendeur</a>
+    <a href="index.php?page=ajouter_produit" class="btn btn-primary mt-4">Ajouter un produit</a>
     <a href="index.php?page=deconnexion" class="btn btn-danger mt-4">Se déconnecter</a>
 </div>
