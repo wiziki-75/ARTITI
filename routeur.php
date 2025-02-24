@@ -18,12 +18,13 @@ if (!isset($_SESSION['email']) && !in_array($page, $pages_accessibles_sans_conne
 
 // 🔹 Définition des routes
 $routes = [
-    'home' => "vue/home.php",
+    'home' => "vue/home2.php",
     'connexion' => "vue/connexion.php",  // ✅ Accessible si non connecté
     'profil' => isset($_SESSION['email']) ? "vue/profil.php" : "vue/non_connecte.php",
     'admin' => ($_SESSION['role'] ?? '') === 'organisateur' ? "vue/admin.php" : "vue/acces.php",
     'passer_vendeur' => isset($_SESSION['email']) ? "vue/passer_vendeur.php" : "vue/non_connecte.php",
     'ajouter_produit' => ($_SESSION['role'] ?? '') === 'vendeur' ? "vue/ajouter_produit.php" : "vue/acces.php",
+    'ajouter_adresse' => isset($_SESSION['email']) ? "vue/ajouter_adresse.php" : "vue/non_connecte.php",
     'inscription' => "vue/inscription.php",  // ✅ Page d'inscription obligatoire
     'deconnexion' => "deconnexion.php"
 ];

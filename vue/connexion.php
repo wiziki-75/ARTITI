@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['user_id'] = $user['id_user'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['role'] = $user['role'];
+        $_SESSION['id'] = $user['id_user'];
 
         // 🔹 Mettre à jour la dernière connexion
         $unControleur->updateLastLogin($user['id_user']);

@@ -10,7 +10,10 @@ class Controleur {
         $this->services = [
             'user' => user::class,
             'commerce' => commerce::class,
-            'produit' => produit::class
+            'produit' => produit::class,
+            'adresse' => adresse::class,
+            'panier' => panier::class,
+            'commande' => commande::class
         ];
     }
 
