@@ -17,7 +17,7 @@ $message = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_produit'], $_POST['prix_unitaire'])) {
     $id_produit = $_POST['id_produit'];
     $prix_unitaire = $_POST['prix_unitaire'];
-    
+
     $ajoutReussi = $unControleur->addToPanier($id_user, $id_produit, 1, $prix_unitaire);
     $message = $ajoutReussi ? "Produit ajouté au panier !" : "Erreur lors de l'ajout au panier.";
 }
@@ -57,12 +57,14 @@ foreach ($panier as $item) {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil - Liste des Produits</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
+
 <body>
     <div class="container mt-5">
         <h2>Bienvenue sur votre espace</h2>
@@ -75,9 +77,18 @@ foreach ($panier as $item) {
         </div>
 
         <!-- Boutons de navigation -->
-        <a href="index.php?page=passer_vendeur" class="btn btn-primary mt-4">Passer vendeur</a>
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'vendeur'): ?>
+            <a href="index.php?page=passer_vendeur" class="btn btn-primary mt-4">Passer vendeur</a>
+        <?php endif; ?>
         <a href="index.php?page=ajouter_produit" class="btn btn-primary mt-4">Ajouter un produit</a>
         <a href="index.php?page=ajouter_adresse" class="btn btn-primary mt-4">Ajouter une adresse</a>
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'vendeur'): ?>
+            <a href="index.php?page=commande_vendeur" class="btn btn-primary mt-4">Commandes</a>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'client'): ?>
+            <a href="index.php?page=commande_client" class="btn btn-primary mt-4">Commandes</a>
+        <?php endif; ?>
+        <a href="index.php?page=panier" class="btn btn-primary mt-4">Panier</a>
         <a href="index.php?page=deconnexion" class="btn btn-danger mt-4">Se déconnecter</a>
 
         <!-- Affichage du Panier -->
@@ -135,4 +146,5 @@ foreach ($panier as $item) {
         <?php endif; ?>
     </div>
 </body>
+
 </html>

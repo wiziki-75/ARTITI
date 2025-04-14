@@ -1,10 +1,12 @@
 <?php
-class Commande extends BDD {
+class Commande extends BDD
+{
 
     /**
      * Créer une commande et insérer ses détails
      */
-    public function createCommande($id_user, $total, $panier) {
+    public function createCommande($id_user, $total, $panier)
+    {
         try {
             $this->pdo->beginTransaction();
 
@@ -50,7 +52,8 @@ class Commande extends BDD {
     /**
      * Récupérer toutes les commandes d'un utilisateur
      */
-    public function getCommandesByUser($id_user) {
+    public function getCommandesByUser($id_user)
+    {
         $sql = "SELECT * FROM Commandes WHERE id_user = :id_user ORDER BY date_commande DESC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id_user' => $id_user]);
@@ -60,7 +63,8 @@ class Commande extends BDD {
     /**
      * Récupérer les détails d'une commande
      */
-    public function getDetailsCommande($id_commande) {
+    public function getDetailsCommande($id_commande)
+    {
         $sql = "SELECT Details_commande.*, Produit.nom 
                 FROM Details_commande 
                 JOIN Produit ON Details_commande.id_produit = Produit.id_produit
@@ -73,7 +77,8 @@ class Commande extends BDD {
     /**
      * Mettre à jour le statut d'une commande
      */
-    public function updateStatutCommande($id_commande, $statut) {
+    public function updateStatutCommande($id_commande, $statut)
+    {
         $sql = "UPDATE Commandes SET statut = :statut WHERE id_commande = :id_commande";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
@@ -85,7 +90,8 @@ class Commande extends BDD {
     /**
      * Supprimer une commande et ses détails
      */
-    public function deleteCommande($id_commande) {
+    public function deleteCommande($id_commande)
+    {
         try {
             $this->pdo->beginTransaction();
 
@@ -106,5 +112,18 @@ class Commande extends BDD {
             return false;
         }
     }
+
+    /**
+     * Récupérer toutes les commandes (admin ou gestion globale)
+     */
+    public function getAllCommandes()
+    {
+        $sql = "SELECT Commandes.*, User.nom, User.prenom, User.email 
+            FROM Commandes 
+            JOIN User ON Commandes.id_user = User.id_user 
+            ORDER BY date_commande DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }
-?>
