@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_produit'], $_POST['
     }
 }
 
+
 // 🔹 Récupérer tous les produits et le panier
 $produits = $unControleur->getAllProduits();
 $panier = $unControleur->getPanierByUser($id_user);

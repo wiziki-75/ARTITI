@@ -106,5 +106,38 @@ class Commande extends BDD {
             return false;
         }
     }
+
+    public function deleteDetailCommande($id_detail) {
+        $sql = "DELETE FROM Details_commande WHERE id_details = :id_detail";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([':id_detail' => $id_detail]);
+    }
+
+    public function recalculerTotalCommande($id_commande) {
+        $sql = "SELECT SUM(quantite * prix_unitaire) AS total 
+                FROM Details_commande 
+                WHERE id_commande = :id_commande";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id_commande' => $id_commande]);
+        $result = $stmt->fetch();
+    
+        $nouveauTotal = $result['total'] ?? 0;
+    
+        if ($nouveauTotal == 0) {
+            // ✅ Supprimer la commande si elle est vide
+            $this->deleteCommande($id_commande);
+            return true;
+        }
+    
+        // 🔁 Sinon, mettre à jour le total
+        $update = "UPDATE Commandes SET total = :total WHERE id_commande = :id_commande";
+        $stmtUpdate = $this->pdo->prepare($update);
+        return $stmtUpdate->execute([
+            ':total' => $nouveauTotal,
+            ':id_commande' => $id_commande
+        ]);
+    }
+    
+    
 }
 ?>

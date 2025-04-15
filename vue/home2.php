@@ -78,6 +78,7 @@ foreach ($panier as $item) {
         <a href="index.php?page=passer_vendeur" class="btn btn-primary mt-4">Passer vendeur</a>
         <a href="index.php?page=ajouter_produit" class="btn btn-primary mt-4">Ajouter un produit</a>
         <a href="index.php?page=ajouter_adresse" class="btn btn-primary mt-4">Ajouter une adresse</a>
+        <a href="index.php?page=voir_commandes" class="btn btn-primary mt-4">Voir les commandes</a>
         <a href="index.php?page=deconnexion" class="btn btn-danger mt-4">Se déconnecter</a>
 
         <!-- Affichage du Panier -->
