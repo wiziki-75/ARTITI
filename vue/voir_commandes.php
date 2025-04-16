@@ -1,9 +1,9 @@
 <?php
 // 🔹 Vérifier si l'utilisateur est connecté et est client
-if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
-    header("Location: index.php?page=connexion");
-    exit();
-}
+// if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
+//     header("Location: index.php?page=connexion");
+//     exit();
+// }
 
 if (isset($_POST['delete_detail'])) {
     $idDetail = $_POST['id_detail'];

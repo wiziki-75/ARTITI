@@ -137,6 +137,17 @@ class Commande extends BDD {
             ':id_commande' => $id_commande
         ]);
     }
+
+    public function getAllCommandes()
+    {
+        $sql = "SELECT Commandes.*, User.nom, User.prenom, User.email 
+            FROM Commandes 
+            JOIN User ON Commandes.id_user = User.id_user 
+            ORDER BY date_commande DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
     
     
 }
