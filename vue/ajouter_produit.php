@@ -169,10 +169,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <label>Type de Produit</label>
         <select name="type" class="form-control" required>
           <option value="">Sélectionnez un type</option>
-          <option value="Fruit">Fruit</option>
-          <option value="Légume">Légume</option>
-          <option value="Boisson">Boisson</option>
-          <option value="Autre">Autre</option>
+          <option value="viande">Viande</option>
+          <option value="banane">Banane</option>
+          <option value="goyave">Goyave</option>
+          <option value="pasteque">Pasteque</option>
+          <option value="raisin">Raisin</option>
+          <option value="mangue">Mangue</option>
+          <option value="pomme">Pomme</option>
         </select>
       </div>
 

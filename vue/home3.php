@@ -3,6 +3,72 @@
 $produits = $unControleur->getAllProduits();
 //$panier = $unControleur->getPanierByUser($id_user);
 $total_articles = 0;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_produit'], $_POST['prix_unitaire'])) {
+    if (isset($_SESSION['user_id'])) {
+        $id_produit = $_POST['id_produit'];
+        $prix_unitaire = $_POST['prix_unitaire'];
+
+        $ajoutReussi = $unControleur->addToPanier($_SESSION['user_id'], $id_produit, 1, $prix_unitaire);
+        $message = $ajoutReussi ? "Produit ajouté au panier !" : "Erreur lors de l'ajout au panier.";
+    } else {
+        header("Location: index.php?page=connexion");
+    }
+}
+
+function get_image($type)
+{
+    switch ($type) {
+        case "viande":
+            return "feature-1.jpg";
+            break;
+        case "banane":
+            return "feature-2.jpg";
+            break;
+        case "goyave":
+            return "feature-3.jpg";
+            break;
+        case "pasteque":
+            return "feature-4.jpg";
+            break;
+        case "raisin":
+            return "feature-5.jpg";
+            break;
+        case "mangue":
+            return "feature-7.jpg";
+            break;
+        case "pomme":
+            return "feature-8.jpg";
+            break;
+    }
+}
+
+function get_cat($type)
+{
+    switch ($type) {
+        case "viande":
+            return "fresh-meat";
+            break;
+        case "banane":
+            return "fruit";
+            break;
+        case "goyave":
+            return "fruit";
+            break;
+        case "pasteque":
+            return "fruit";
+            break;
+        case "raisin":
+            return "fruit";
+            break;
+        case "mangue":
+            return "fruit";
+            break;
+        case "pomme":
+            return "fruit";
+            break;
+    }
+}
 ?>
 
 <!-- Humberger Begin -->
@@ -12,15 +78,6 @@ $total_articles = 0;
         <a href="#"><img src="static/img/logo2.png" alt=""></a>
     </div>
     <div class="humberger__menu__widget">
-        <div class="header__top__right__language">
-            <img src="static/img/language.png" alt="">
-            <div>Francais</div>
-            <span class="arrow_carrot-down"></span>
-            <ul>
-                <li><a href="#">Francais</a></li>
-                <li><a href="#">Anglais</a></li>
-            </ul>
-        </div>
         <div class="header__top__right__auth">
             <a href="#"><i class="fa fa-user"></i> </a>
         </div>
@@ -29,6 +86,7 @@ $total_articles = 0;
         <ul>
             <li class="active"><a href="index.php">Accueil</a></li>
             <li><a href="./shop-grid.html">Commande</a></li>
+            <li><a href="./shop-grid.html">Ajouter un produit</a></li>
             <!-- <li><a href="#">Pages</a>
                 <ul class="header__menu__dropdown">
                     <li><a href="./shoping-cart.html">Panier</a></li>
@@ -63,17 +121,15 @@ $total_articles = 0;
                             <a href="#"><i class="fa fa-linkedin"></i></a>
                             <a href="#"><i class="fa fa-pinterest-p"></i></a>
                         </div>
-                        <div class="header__top__right__language">
-                            <img src="static/img/language.png" alt="">
-                            <div>Francais</div>
-                            <span class="arrow_carrot-down"></span>
-                            <ul>
-                                <li><a href="#">Francais</a></li>
-                                <li><a href="#">Anglais</a></li>
-                            </ul>
-                        </div>
                         <div class="header__top__right__auth">
-                            <a href="#"><i class="fa fa-user"></i> Connexion</a>
+                            <?php
+                            if (isset($_SESSION['email'])) {
+                                echo '<a href="index.php?page=deconnexion"><i class="fa fa-user"></i> Se déconnecter</a>';
+                            } else {
+                                echo '<a href="index.php?page=connexion"><i class="fa fa-user"></i> Connexion</a>';
+                            }
+                            ?>
+
                         </div>
                     </div>
                 </div>
@@ -92,6 +148,11 @@ $total_articles = 0;
                     <ul>
                         <li class="active"><a href="index.php">Accueil</a></li>
                         <li><a href="index.php?page=voir_commandes">Commande</a></li>
+
+                        <?php if (isset($_SESSION['role'])): ?>
+                        <li><a href="index.php?page=ajouter_produit">Ajouter un produit</a></li>
+                        <li><a href="index.php?page=passer_vendeur">Passer vendeur</a></li>
+                        <?php endif; ?>
                         <!-- <li><a href="#">Pages</a>
                             <ul class="header__menu__dropdown">
                                 <li><a href="./shop-details.html">Détails de la boutique</a></li>
@@ -99,18 +160,10 @@ $total_articles = 0;
                                 <li><a href="./checkout.html">Paiement</a></li>
                             </ul>
                         </li> -->
-                        <li><a href="index.php?page=checkout">Panier</a></li>
+                        <li><a href="index.php?page=panier">Panier</a></li>
                     </ul>
 
                 </nav>
-            </div>
-            <div class="col-lg-3">
-                <div class="header__cart">
-                    <ul>
-                        <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                        <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
-                    </ul>
-                </div>
             </div>
         </div>
         <div class="humberger__open">
@@ -190,7 +243,7 @@ $total_articles = 0;
                 <div class="featured__controls">
                     <ul>
                         <li class="active" data-filter="*">Tous</li>
-                        <li data-filter=".oranges">Oranges</li>
+                        <li data-filter=".fruit">Fruits</li>
                         <li data-filter=".fresh-meat">Viande fraîche</li>
                         <li data-filter=".vegetables">Légumes</li>
                     </ul>
@@ -199,113 +252,31 @@ $total_articles = 0;
         </div>
         <div class="row featured__filter">
             <?php foreach ($produits as $produit) : ?>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="static/img/featured/feature-1.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Macreuse à pot-au-feu, Maison Conquet (de 700 g à 800 g)</a></h6>
-                        <h5>11.49€</h5>
+                <div class="col-lg-3 col-md-4 col-sm-6 mix oranges <?= get_cat($produit['type']) ?>">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" data-setbg="static/img/featured/<?= get_image($produit['type']) ?>">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                <li>
+                                    <form method="post">
+                                        <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
+                                        <input type="hidden" name="prix_unitaire" value="<?= $produit['prix'] ?>">
+                                        <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none;">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </button>
+                                    </form>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="#"><?= htmlspecialchars($produit['nom']) ?></a></h6>
+                            <h5><?= $produit['prix'] ?> / KG</h5>
+                        </div>
                     </div>
                 </div>
-            </div>
             <?php endforeach; ?>
-            
-            <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fastfood">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="static/img/featured/feature-2.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Banane des Antilles (calibre moyen), Martinique</a></h6>
-                        <h5>0.55€/pièce</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fresh-meat">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="static/img/featured/feature-3.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Goyave des Antilles</a></h6>
-                        <h5>1.68€/pièce</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix fastfood oranges">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="static/img/featured/feature-4.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Pastèque</a></h6>
-                        <h5>2.93€/pièce</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix fresh-meat vegetables">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="static/img/featured/feature-5.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Raisin rose globe</a></h6>
-                        <h5> 4.75€/500gr</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fastfood">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="static/img/featured/feature-7.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Mangue Kent affinée "mûre à point" (gros calibre)</a></h6>
-                        <h5>2.93€/pièce</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 mix fastfood vegetables">
-                <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="static/img/featured/feature-8.jpg">
-                        <ul class="featured__item__pic__hover">
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="featured__item__text">
-                        <h6><a href="#">Pomme Braeburn du Loir-et-Cher (calibre moyen)</a></h6>
-                        <h5>0.64€/pièce</h5>
-                    </div>
-                </div>
-            </div>
         </div>
 </section>
 
@@ -318,7 +289,7 @@ $total_articles = 0;
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="footer__about">
                     <div class="footer__about__logo">
-                        <a href="./index.html"><img src="static/img/logo.png" alt="Artiti Logo"></a>
+                        <a href="index.php"><img src="static/img/logo.png" alt="Artiti Logo"></a>
                     </div>
                     <ul>
                         <li>Adresse : 42 Rue de la Création, 75011 Paris</li>
@@ -371,7 +342,9 @@ $total_articles = 0;
                     <div class="footer__copyright__text">
                         <p>
                             &copy;
-                            <script>document.write(new Date().getFullYear());</script> Tous droits réservés |
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script> Tous droits réservés |
                             Design signé avec <i class="fa fa-heart" aria-hidden="true"></i> par l’équipe Artiti
                         </p>
                     </div>

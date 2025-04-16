@@ -1,15 +1,15 @@
 <?php
 // Vérification si l'utilisateur est connecté
-if (!isset($_SESSION['email'])) {
-    header("Location: index.php?page=connexion");
-    exit();
-}
+// if (!isset($_SESSION['email'])) {
+//     header("Location: index.php?page=connexion");
+//     exit();
+// }
 
-// Vérification si l'utilisateur est déjà vendeur
-if ($_SESSION['role'] === 'vendeur') {
-    header("Location: index.php?page=home");
-    exit();
-}
+// // Vérification si l'utilisateur est déjà vendeur
+// if ($_SESSION['role'] === 'vendeur') {
+//     header("Location: index.php?page=home");
+//     exit();
+// }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $description = trim($_POST['description']);

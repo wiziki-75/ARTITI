@@ -11,14 +11,14 @@ $page = $_GET['page'] ?? 'home';
 // 🔹 Si l'utilisateur n'est pas connecté, il peut uniquement aller sur inscription et connexion
 $pages_accessibles_sans_connexion = ['inscription', 'connexion'];
 
-if (!isset($_SESSION['email']) && !in_array($page, $pages_accessibles_sans_connexion)) {
-    header("Location: index.php?page=inscription");
-    exit();
-}
+// if (!isset($_SESSION['email']) && !in_array($page, $pages_accessibles_sans_connexion)) {
+//     header("Location: index.php");
+//     exit();
+// }
 
 // 🔹 Définition des routes
 $routes = [
-    'home' => "vue/home2.php",
+    'home' => "vue/home3.php",
     'connexion' => "vue/connexion.php",  // ✅ Accessible si non connecté
     'profil' => isset($_SESSION['email']) ? "vue/profil.php" : "vue/non_connecte.php",
     'panier' => isset($_SESSION['email']) ? "vue/panier.php" : "vue/non_connecte.php",
@@ -29,17 +29,16 @@ $routes = [
     'ajouter_adresse' => isset($_SESSION['email']) ? "vue/ajouter_adresse.php" : "vue/non_connecte.php",
     'voir_commandes' => isset($_SESSION['email']) ? "vue/voir_commandes.php" : "vue/non_connecte.php",
     'checkout' => "vue/checkout.php",
-    'inscription' => "vue/inscription.php",  // ✅ Page d'inscription obligatoire
-    'deconnexion' => "deconnexion.php"
+    'inscription' => "vue/inscription.php"
 ];
 
 // 🔹 Gestion de la déconnexion
 if ($page === 'deconnexion') {
     session_destroy();
     unset($_SESSION);
-    header("Location: index.php?page=inscription");
+    header("Location: index.php");
     exit();
 }
 
 // 🔹 Charger la bonne page
-require_once($routes[$page] ?? "vue/inscription.php");
+require_once($routes[$page] ?? "index.php");
