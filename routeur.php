@@ -28,6 +28,7 @@ $routes = [
     'commande_vendeur' => ($_SESSION['role'] ?? '') === 'vendeur' ? "vue/commande_vendeur.php" : "vue/acces.php",
     'ajouter_adresse' => isset($_SESSION['email']) ? "vue/ajouter_adresse.php" : "vue/non_connecte.php",
     'voir_commandes' => isset($_SESSION['email']) ? "vue/voir_commandes.php" : "vue/non_connecte.php",
+    'checkout' => "vue/checkout.php",
     'inscription' => "vue/inscription.php",  // ✅ Page d'inscription obligatoire
     'deconnexion' => "deconnexion.php"
 ];
