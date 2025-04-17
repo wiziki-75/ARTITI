@@ -1,8 +1,4 @@
 <?php
-if (!isset($_SESSION['id'])) {
-    echo "<div class='alert alert-warning'>Veuillez vous connecter pour voir votre panier.</div>";
-    return;
-}
 
 $id_user = $_SESSION['id'];
 $message = null;

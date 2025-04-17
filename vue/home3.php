@@ -75,7 +75,7 @@ function get_cat($type)
 <div class="humberger__menu__overlay"></div>
 <div class="humberger__menu__wrapper">
     <div class="humberger__menu__logo">
-        <a href="#"><img src="static/img/logo2.png" alt=""></a>
+        <a href="#"><img src="static/img/logo.png" alt=""></a>
     </div>
     <div class="humberger__menu__widget">
         <div class="header__top__right__auth">
@@ -140,7 +140,7 @@ function get_cat($type)
         <div class="row">
             <div class="col-lg-3">
                 <div class="header__logo">
-                    <a href="./index.html"><img src="static/img/logo2.png" alt=""></a>
+                    <a href="./index.html"><img src="static/img/logo.png" alt=""></a>
                 </div>
             </div>
             <div class="col-lg-6">
