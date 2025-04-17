@@ -1,75 +1,43 @@
 <?php
-
 $produits = $unControleur->getAllProduits();
-//$panier = $unControleur->getPanierByUser($id_user);
 $total_articles = 0;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_produit'], $_POST['prix_unitaire'])) {
-    if (isset($_SESSION['user_id'])) {
-        $id_produit = $_POST['id_produit'];
-        $prix_unitaire = $_POST['prix_unitaire'];
+// Traitement de l'ajout au panier
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id_produit']) && !empty($_POST['prix_unitaire'])) {
+    if (!empty($_SESSION['user_id'])) {
+        $id_produit = (int) $_POST['id_produit'];
+        $prix_unitaire = (float) $_POST['prix_unitaire'];
 
         $ajoutReussi = $unControleur->addToPanier($_SESSION['user_id'], $id_produit, 1, $prix_unitaire);
         $message = $ajoutReussi ? "Produit ajouté au panier !" : "Erreur lors de l'ajout au panier.";
     } else {
         header("Location: index.php?page=connexion");
+        exit(); // Toujours sortir après une redirection
     }
 }
 
-function get_image($type)
-{
-    switch ($type) {
-        case "viande":
-            return "feature-1.jpg";
-            break;
-        case "banane":
-            return "feature-2.jpg";
-            break;
-        case "goyave":
-            return "feature-3.jpg";
-            break;
-        case "pasteque":
-            return "feature-4.jpg";
-            break;
-        case "raisin":
-            return "feature-5.jpg";
-            break;
-        case "mangue":
-            return "feature-7.jpg";
-            break;
-        case "pomme":
-            return "feature-8.jpg";
-            break;
-    }
+// Fonctions utilitaires
+function get_image(string $type): string {
+    $images = [
+        'viande'   => 'feature-1.jpg',
+        'banane'   => 'feature-2.jpg',
+        'goyave'   => 'feature-3.jpg',
+        'pasteque' => 'feature-4.jpg',
+        'raisin'   => 'feature-5.jpg',
+        'mangue'   => 'feature-7.jpg',
+        'pomme'    => 'feature-8.jpg'
+    ];
+
+    return $images[$type] ?? 'default.jpg';
 }
 
-function get_cat($type)
-{
-    switch ($type) {
-        case "viande":
-            return "fresh-meat";
-            break;
-        case "banane":
-            return "fruit";
-            break;
-        case "goyave":
-            return "fruit";
-            break;
-        case "pasteque":
-            return "fruit";
-            break;
-        case "raisin":
-            return "fruit";
-            break;
-        case "mangue":
-            return "fruit";
-            break;
-        case "pomme":
-            return "fruit";
-            break;
-    }
+function get_cat(string $type): string {
+    $fruits = ['banane', 'goyave', 'pasteque', 'raisin', 'mangue', 'pomme'];
+
+    return in_array($type, $fruits) ? 'fruit' : 'fresh-meat';
 }
 ?>
+
 
 <!-- Humberger Begin -->
 <div class="humberger__menu__overlay"></div>
@@ -150,9 +118,15 @@ function get_cat($type)
                         <li><a href="index.php?page=voir_commandes">Commande</a></li>
 
                         <?php if (isset($_SESSION['role'])): ?>
-                        <li><a href="index.php?page=ajouter_produit">Ajouter un produit</a></li>
-                        <li><a href="index.php?page=passer_vendeur">Passer vendeur</a></li>
+                            <li><a href="index.php?page=ajouter_produit">Ajouter un produit</a></li>
+
+                            <?php if ($_SESSION['role'] === 'vendeur'): ?>
+                                <li><a href="index.php?page=commande_vendeur">Espace vendeur</a></li>
+                            <?php else: ?>
+                                <li><a href="index.php?page=passer_vendeur">Passer vendeur</a></li>
+                            <?php endif; ?>
                         <?php endif; ?>
+
                         <!-- <li><a href="#">Pages</a>
                             <ul class="header__menu__dropdown">
                                 <li><a href="./shop-details.html">Détails de la boutique</a></li>
