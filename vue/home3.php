@@ -38,6 +38,22 @@ function get_cat(string $type): string
 
     return in_array($type, $fruits) ? 'fruit' : 'fresh-meat';
 }
+
+function get_prenom(string $type): string
+{
+    $prenoms = [
+        'viande'   => 'Lucas',
+        'banane'   => 'Emma',
+        'goyave'   => 'Noah',
+        'pasteque' => 'Léa',
+        'raisin'   => 'Hugo',
+        'mangue'   => 'Chloé',
+        'pomme'    => 'Enzo'
+    ];
+
+    return $prenoms[$type] ?? 'Inconnu';
+}
+
 ?>
 
 
@@ -261,6 +277,7 @@ function get_cat(string $type): string
                         </div>
                         <div class="featured__item__text">
                             <h6><a href="#"><?= htmlspecialchars($produit['nom']) ?></a></h6>
+                            <h6><a href="#">Vendu par <?= get_prenom($produit['type']) ?></a></h6>
                             <h5><?= $produit['prix'] ?> / KG</h5>
                         </div>
                     </div>
