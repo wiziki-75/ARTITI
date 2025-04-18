@@ -17,7 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id_produit']) && !em
 }
 
 // Fonctions utilitaires
-function get_image(string $type): string {
+function get_image(string $type): string
+{
     $images = [
         'viande'   => 'feature-1.jpg',
         'banane'   => 'feature-2.jpg',
@@ -31,7 +32,8 @@ function get_image(string $type): string {
     return $images[$type] ?? 'default.jpg';
 }
 
-function get_cat(string $type): string {
+function get_cat(string $type): string
+{
     $fruits = ['banane', 'goyave', 'pasteque', 'raisin', 'mangue', 'pomme'];
 
     return in_array($type, $fruits) ? 'fruit' : 'fresh-meat';
@@ -108,20 +110,28 @@ function get_cat(string $type): string {
         <div class="row">
             <div class="col-lg-3">
                 <div class="header__logo">
-                    <a href="./index.html"><img src="static/img/logo.png" alt=""></a>
+                    <a href="index.php"><img src="static/img/logo.png" alt=""></a>
                 </div>
             </div>
             <div class="col-lg-6">
                 <nav class="header__menu">
                     <ul>
                         <li class="active"><a href="index.php">Accueil</a></li>
-                        <li><a href="index.php?page=voir_commandes">Commande</a></li>
+                        <li><a href="#">Espace client</a>
+                            <ul class="header__menu__dropdown">
+                                <li><a href="index.php?page=panier">Panier</a></li>
+                                <li><a href="index.php?page=voir_commandes">Commande</a></li>
+                            </ul>
+                        </li>
 
                         <?php if (isset($_SESSION['role'])): ?>
-                            <li><a href="index.php?page=ajouter_produit">Ajouter un produit</a></li>
-
                             <?php if ($_SESSION['role'] === 'vendeur'): ?>
-                                <li><a href="index.php?page=commande_vendeur">Espace vendeur</a></li>
+                                <li><a href="#">Espace vendeur</a>
+                                    <ul class="header__menu__dropdown">
+                                        <li><a href="index.php?page=ajouter_produit">Ajouter un produit</a></li>
+                                        <li><a href="index.php?page=commande_vendeur">Commandes</a></li>
+                                    </ul>
+                                </li>
                             <?php else: ?>
                                 <li><a href="index.php?page=passer_vendeur">Passer vendeur</a></li>
                             <?php endif; ?>
@@ -134,7 +144,12 @@ function get_cat(string $type): string {
                                 <li><a href="./checkout.html">Paiement</a></li>
                             </ul>
                         </li> -->
-                        <li><a href="index.php?page=panier">Panier</a></li>
+                        <li><a href="#">Questions & Réponses</a>
+                            <ul class="header__menu__dropdown">
+                                <li><a href="#">Commerçant</a></li>
+                                <li><a href="#">Consommateur</a></li>
+                            </ul>
+                        </li>
                     </ul>
 
                 </nav>
@@ -191,10 +206,10 @@ function get_cat(string $type): string {
                 </div>
                 <div class="hero__item set-bg" data-setbg="static/img/hero/banner.jpg">
                     <div class="hero__text">
-                        <span>FRUITS FRAIS</span>
-                        <h2>Légumes <br />100% Biologiques</h2>
-                        <p>Retrait et livraison gratuits disponibles</p>
-                        <a href="#" class="primary-btn">ACHETER MAINTENANT</a>
+                        <span>PRODUITS FRAIS</span>
+                        <h2> <br />100% Biologiques</h2>
+                        <p>Retrait et livraison gratuits disponibles dès 30€ d'achat</p>
+                        <a href="#produits" class="primary-btn">ACHETER MAINTENANT</a>
                     </div>
 
                 </div>
@@ -207,12 +222,12 @@ function get_cat(string $type): string {
 <!-- Categories Section End -->
 
 <!-- Featured Section Begin -->
-<section class="featured spad">
+<section class="featured spad" id="produits">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title">
-                    <h2>Produits en vedette</h2>
+                    <h2>Produits</h2>
                 </div>
                 <div class="featured__controls">
                     <ul>
